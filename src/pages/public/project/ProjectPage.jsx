@@ -299,6 +299,7 @@ export default function ProjectPage() {
                 onVote={(e) => handleVote(d.id, e)}
                 themeColors={themeColors}
                 PRIMARY={PRIMARY}
+                SECONDARY={SECONDARY}
               />
             ))}
           </Box>
@@ -537,7 +538,7 @@ export default function ProjectPage() {
   );
 }
 
-function ProjectDatasetCard({ dataset, onOpen, onVote, themeColors, PRIMARY }) {
+function ProjectDatasetCard({ dataset, onOpen, onVote, themeColors, PRIMARY, SECONDARY }) {
   const sc = statusColors[dataset.status] || statusColors.Active;
 
   return (
