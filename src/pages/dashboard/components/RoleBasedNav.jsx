@@ -34,6 +34,14 @@ import {
 } from "lucide-react";
 
 const PRIMARY_COLOR = "#61C5C3";
+const ROLE_COLORS = {
+  admin: "#f59e0b",
+  seller: "#3b82f6",
+  buyer: "#8b5cf6",
+  editor: "#10b981",
+  viewer: "#6366f1",
+  super_admin: "#f59e0b",
+};
 const TOKEN_KEY = "dali-token";
 const USER_KEY = "dali-user";
 
@@ -158,57 +166,68 @@ export default function RoleBasedNav({ currentPath }) {
       .toUpperCase();
   };
 
+  const roleColor = ROLE_COLORS[userRole] || PRIMARY_COLOR;
+
   return (
     <Box
       sx={{
-        width: 280,
-        backgroundColor: "#f8f9fa",
-        borderRight: "1px solid #eee",
-        p: 2,
+        width: 320,
+        background: "linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)",
+        borderRight: `2px solid ${roleColor}20`,
+        p: 3,
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
       }}
     >
       {/* User Info Section */}
-      <Box sx={{ mb: 3, pb: 2, borderBottom: "1px solid #eee" }}>
+      <Box sx={{ mb: 4, pb: 3, borderBottom: `2px solid ${roleColor}30` }}>
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            gap: 1.5,
+            gap: 2,
             mb: 2,
             cursor: "pointer",
+            padding: "12px",
+            borderRadius: "12px",
+            transition: "all 0.3s ease",
+            "&:hover": {
+              backgroundColor: `${roleColor}15`,
+            },
           }}
           onClick={handleRoleClick}
         >
           <Avatar
             sx={{
-              width: 40,
-              height: 40,
-              backgroundColor: PRIMARY_COLOR,
-              fontWeight: 600,
-              fontSize: "0.875rem",
+              width: 48,
+              height: 48,
+              backgroundColor: roleColor,
+              fontWeight: 700,
+              fontSize: "1.1rem",
+              boxShadow: `0 4px 12px ${roleColor}40`,
             }}
           >
             {getInitials()}
           </Avatar>
           <Box sx={{ flex: 1 }}>
-            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+            <Typography variant="body1" sx={{ fontWeight: 800, fontSize: "1.05rem", color: "#1f2937" }}>
               {authUser?.name || "User"}
             </Typography>
             <Typography
-              variant="caption"
+              variant="body2"
               sx={{
-                color: PRIMARY_COLOR,
-                fontWeight: 500,
-                textTransform: "capitalize",
+                color: roleColor,
+                fontWeight: 700,
+                textTransform: "uppercase",
+                fontSize: "0.85rem",
+                letterSpacing: "1px",
               }}
             >
               {userRole}
             </Typography>
           </Box>
-          <ChevronDown size={18} color="gray" />
+          <ChevronDown size={20} color={roleColor} />
         </Box>
 
         {/* Role Switcher Menu */}
@@ -246,31 +265,38 @@ export default function RoleBasedNav({ currentPath }) {
               key={item.path}
               onClick={() => handleNavigate(item.path, item.section)}
               sx={{
-                p: 1.5,
-                mb: 1,
-                borderRadius: 1,
-                backgroundColor: isActive ? `${PRIMARY_COLOR}20` : "transparent",
-                borderLeft: isActive ? `4px solid ${PRIMARY_COLOR}` : "4px solid transparent",
-                pl: 1.25,
+                p: 2,
+                mb: 1.5,
+                borderRadius: "12px",
+                backgroundColor: isActive ? `${roleColor}15` : "transparent",
+                borderLeft: isActive ? `5px solid ${roleColor}` : "5px solid transparent",
+                pl: 1.75,
+                transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
                 "&:hover": {
-                  backgroundColor: `${PRIMARY_COLOR}10`,
+                  backgroundColor: `${roleColor}10`,
+                  transform: "translateX(4px)",
+                  borderLeftColor: roleColor,
                 },
               }}
             >
               <ListItemIcon
                 sx={{
-                  minWidth: 36,
-                  color: isActive ? PRIMARY_COLOR : "gray",
+                  minWidth: 44,
+                  color: isActive ? roleColor : "#9ca3af",
+                  transition: "color 0.2s ease",
                 }}
               >
-                <Icon size={20} />
+                <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
               </ListItemIcon>
               <ListItemText
                 primary={item.label}
                 sx={{
                   "& .MuiListItemText-primary": {
-                    fontWeight: isActive ? 600 : 500,
-                    color: isActive ? PRIMARY_COLOR : "#333",
+                    fontWeight: isActive ? 800 : 700,
+                    color: isActive ? roleColor : "#4b5563",
+                    fontSize: "1.05rem",
+                    letterSpacing: "0.3px",
+                    transition: "color 0.2s ease",
                   },
                 }}
               />
@@ -280,40 +306,62 @@ export default function RoleBasedNav({ currentPath }) {
       </List>
 
       {/* Bottom Menu Items */}
-      <Divider sx={{ my: 2 }} />
+      <Divider sx={{ my: 3, borderColor: `${roleColor}20` }} />
       <List>
         <ListItem
           button
           onClick={() => navigate("/profile")}
           sx={{
-            p: 1.5,
-            mb: 1,
-            borderRadius: 1,
+            p: 2,
+            mb: 1.5,
+            borderRadius: "12px",
+            transition: "all 0.25s ease",
             "&:hover": {
-              backgroundColor: "#f0f0f0",
+              backgroundColor: "#e0e7ff",
+              transform: "translateX(4px)",
             },
           }}
         >
-          <ListItemIcon sx={{ minWidth: 36, color: "gray" }}>
-            <Settings size={20} />
+          <ListItemIcon sx={{ minWidth: 44, color: "#6366f1" }}>
+            <Settings size={24} strokeWidth={2} />
           </ListItemIcon>
-          <ListItemText primary="Settings" />
+          <ListItemText
+            primary="Settings"
+            sx={{
+              "& .MuiListItemText-primary": {
+                fontWeight: 700,
+                color: "#4b5563",
+                fontSize: "1.05rem",
+              },
+            }}
+          />
         </ListItem>
         <ListItem
           button
           sx={{
-            p: 1.5,
-            borderRadius: 1,
+            p: 2,
+            borderRadius: "12px",
+            transition: "all 0.25s ease",
             "&:hover": {
-              backgroundColor: "#f0f0f0",
+              backgroundColor: "#fee2e2",
+              transform: "translateX(4px)",
             },
           }}
           onClick={handleLogout}
         >
-          <ListItemIcon sx={{ minWidth: 36, color: "#ef4444" }}>
-            <LogOut size={20} />
+          <ListItemIcon sx={{ minWidth: 44, color: "#ef4444" }}>
+            <LogOut size={24} strokeWidth={2} />
           </ListItemIcon>
-          <ListItemText primary="Logout" sx={{ color: "#ef4444" }} />
+          <ListItemText
+            primary="Logout"
+            sx={{
+              "& .MuiListItemText-primary": {
+                fontWeight: 700,
+                color: "#ef4444",
+                fontSize: "1.05rem",
+              },
+            }}
+          />
         </ListItem>
       </List>
     </Box>
